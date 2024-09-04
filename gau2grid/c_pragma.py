@@ -64,7 +64,12 @@ _pragma_data = """
 #elif defined(__GNUC__) || defined(__GNUG__)
     // pragmas for GCC
 
-    #define ALIGNED_MALLOC(alignment, size)                  aligned_alloc(alignment, size)
+    #define MULTIPLE(a, b) \
+      ({ int _a = (int) (a); \
+         int _b = (int) (b); \
+         _b % _a ? (_b / _a + 1)*_a : _b; }) 
+
+    #define ALIGNED_MALLOC(alignment, size)                  aligned_alloc(alignment, MULTIPLE(alignment, size))
     #define ALIGNED_FREE(ptr)                                free(ptr)
     #define ASSUME_ALIGNED(ptr, width)
 
